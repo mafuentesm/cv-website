@@ -3,16 +3,16 @@
   <g stroke="#3a4150" stroke-width="2">
     <path d="M150 180L320 80M150 180L320 180M150 180L320 280M320 80L500 130M320 180L500 130M320 180L500 240M320 280L500 240"/>
   </g>
-  <g stroke="#f0b35a" stroke-width="4" stroke-linecap="round">
+  <g stroke="#5aa2f0" stroke-width="4" stroke-linecap="round">
     <path d="M150 180L320 180M320 180L500 130"/>
   </g>
-  <circle cx="150" cy="180" r="16" fill="#f0b35a"/>
+  <circle cx="150" cy="180" r="16" fill="#5aa2f0"/>
   <g fill="#1b1f27" stroke="#9aa1ae" stroke-width="3">
     <circle cx="320" cy="80" r="11"/>
     <circle cx="320" cy="280" r="11"/>
     <circle cx="500" cy="240" r="11"/>
   </g>
-  <g fill="#1b1f27" stroke="#f0b35a" stroke-width="3">
+  <g fill="#1b1f27" stroke="#5aa2f0" stroke-width="3">
     <circle cx="320" cy="180" r="11"/>
     <circle cx="500" cy="130" r="11"/>
   </g>

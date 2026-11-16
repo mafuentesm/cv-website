@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Matías Fuentes Mora</title>
   <!-- EDITAR: descripción que aparece en buscadores y al compartir el enlace -->
-  <meta name="description" content="Matías Fuentes, estudiante y programador de la Pontificia Universidad Católica de Chile.">
+  <meta name="description" content="Matías Fuentes Mora, estudiante y programador de la Pontificia Universidad Católica de Chile.">
 
   <!-- EDITAR: fuentes. Cambia este <link> y luego --font-title / --font-body / --font-mono en css/style.css -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -15,75 +15,91 @@
 </head>
 <body>
 
-  <!-- Capa de color que cambia el tono del fondo entre secciones (ver js/main.js, bloque 3) -->
+  <!-- Capa de color que cambia el tono del fondo entre secciones (ver js/main.js, bloque 1) -->
   <div class="page-tint" aria-hidden="true"></div>
 
   <!-- Barra de progreso de lectura -->
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- ============================================================
-       1. HERO
-       La sección es más alta que la pantalla; su contenido queda fijo
-       mientras el nombre se achica y se desvanece.
+       BARRA DE NAVEGACIÓN
        ============================================================ -->
-  <header class="hero scroll-scene" data-tone="base">
-    <div class="hero-stage">
-      <!-- EDITAR: foto personal (cuadrada) -->
-      <img class="hero-photo" src="assets/images/foto-perfil.png" alt="Foto de Matías Fuentes" width="400" height="400">
-      <h1 class="hero-title">Matías Fuentes Mora</h1>
+  <nav class="navbar" aria-label="Secciones">
+    <a class="navbar-home" href="#inicio">MF</a>
+    <ul class="navbar-links">
+      <li><a href="#educacion">Educación</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
 
-      <a class="scroll-indicator" href="#sobre-mi" aria-label="Bajar a la presentación"></a>
+  <!-- ============================================================
+       1. HERO
+       ============================================================ -->
+  <header class="hero scroll-item" id="inicio" data-tone="base">
+    <div class="hero-content">
+      <!-- EDITAR: foto personal. Se recorta en círculo; zoom y encuadre en css/style.css (sección 5, .hero-photo-frame) -->
+      <div class="hero-photo-frame">
+        <img class="hero-photo" src="assets/images/foto-perfil.jpg" alt="Foto de Matías Fuentes Mora" width="600" height="800">
+      </div>
+
+      <div class="hero-text">
+        <!-- EDITAR: los mismos enlaces que en Contacto -->
+        <div class="icon-links">
+          <a class="icon-link" href="https://www.linkedin.com/in/COMPLETAR" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a class="icon-link" href="mailto:COMPLETAR@correo.com" aria-label="Correo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </a>
+        </div>
+
+        <h1 class="hero-title">Matías Fuentes Mora</h1>
+        <p class="hero-subtitle">Estudiante y programador</p>
+        <!-- EDITAR: 2-3 líneas sobre ti -->
+        <p class="hero-description">
+          Pontificia Universidad Católica de Chile.
+          [COMPLETAR: qué te interesa, en qué trabajas y qué estás buscando.]
+        </p>
+      </div>
     </div>
+
+    <a class="scroll-indicator" href="#educacion" aria-label="Bajar a Educación"></a>
   </header>
 
   <main>
 
     <!-- ============================================================
-         2. PRESENTACIÓN
-         Cada palabra se ilumina mientras bajas.
+         2. EDUCACIÓN (línea de tiempo)
          ============================================================ -->
-    <section class="intro scroll-scene" id="sobre-mi" data-tone="base">
-      <div class="intro-stage">
-        <!-- EDITAR: 2-3 líneas sobre ti. Solo texto (sin etiquetas dentro) -->
-        <p class="intro-text">
-          Estudiante y programador de la Pontificia Universidad Católica de Chile.
-          [COMPLETAR: qué te interesa, en qué trabajas y qué estás buscando.]
-        </p>
-      </div>
-    </section>
+    <section class="section" id="educacion" data-tone="alt">
+      <h2 class="section-title">Educación</h2>
 
-    <!-- ============================================================
-         3. EDUCACIÓN
-         El título queda fijo; cada universidad aparece de a una.
-         ============================================================ -->
-    <section class="education scroll-scene" id="educacion" data-tone="alt">
-      <div class="education-stage">
-        <h2 class="education-title">Educación</h2>
+      <ol class="timeline">
 
-        <ol class="education-list">
-
-          <!-- UNIVERSIDAD: copia desde <li> hasta </li> para agregar otra -->
-          <li class="education-item">
-            <!-- EDITAR: logo de la universidad -->
-            <img class="education-logo" src="assets/logos/logo-uc.svg" alt="Logo de la Pontificia Universidad Católica de Chile" width="609" height="235">
-            <h3 class="education-name">Pontificia Universidad Católica de Chile</h3>
+        <!-- ETAPA: copia desde <li> hasta </li> para agregar otra (la más reciente arriba) -->
+        <li class="timeline-item scroll-item">
+          <!-- EDITAR: periodo, por ejemplo "2023 — presente" -->
+          <p class="timeline-date">[COMPLETAR: periodo]</p>
+          <div class="timeline-body">
+            <!-- EDITAR: logo de la institución -->
+            <img class="timeline-logo" src="assets/logos/logo-uc.svg" alt="Logo de la Pontificia Universidad Católica de Chile" width="609" height="235">
+            <h3 class="timeline-title">Pontificia Universidad Católica de Chile</h3>
             <!-- EDITAR: carrera -->
-            <p class="education-degree">[COMPLETAR: carrera]</p>
-            <!-- EDITAR: periodo, por ejemplo "2023 — presente" -->
-            <p class="education-period">[COMPLETAR: periodo]</p>
-          </li>
+            <p class="timeline-text">[COMPLETAR: carrera]</p>
+          </div>
+        </li>
 
-        </ol>
-      </div>
+      </ol>
     </section>
 
     <!-- ============================================================
-         4. LOGROS Y PROYECTOS
+         3. LOGROS Y PROYECTOS (grilla)
          ============================================================ -->
-    <section class="projects" id="proyectos" data-tone="base">
-      <h2 class="projects-title">Proyectos</h2>
+    <section class="section" id="proyectos" data-tone="base">
+      <h2 class="section-title">Proyectos</h2>
 
-      <ul class="project-list">
+      <ul class="project-grid">
 
         <!-- PROYECTO: copia desde <li> hasta </li> para agregar otro -->
         <li class="project scroll-item">
@@ -91,18 +107,16 @@
             <!-- EDITAR: imagen del proyecto (proporción 16:9) -->
             <img class="project-image" src="assets/images/proyecto-cityexpress.svg" alt="Imagen del proyecto CityExpress" width="640" height="360">
           </div>
-          <div class="project-text">
-            <h3 class="project-name">CityExpress</h3>
-            <!-- EDITAR: descripción breve -->
-            <p class="project-description">
-              Ruteo y entrega de paquetes. Equipo de ~5 personas, infraestructura en AWS.
-            </p>
-            <!-- EDITAR: tecnologías (una por <li>) -->
-            <ul class="tech-list">
-              <li>AWS</li>
-              <li>[COMPLETAR]</li>
-            </ul>
-          </div>
+          <h3 class="project-name">CityExpress</h3>
+          <!-- EDITAR: descripción breve -->
+          <p class="project-description">
+            Ruteo y entrega de paquetes. Equipo de ~5 personas, infraestructura en AWS.
+          </p>
+          <!-- EDITAR: tecnologías (una por <li>) -->
+          <ul class="tech-list">
+            <li>AWS</li>
+            <li>[COMPLETAR]</li>
+          </ul>
         </li>
 
         <li class="project scroll-item">
@@ -110,45 +124,52 @@
             <!-- EDITAR: imagen del proyecto (proporción 16:9) -->
             <img class="project-image" src="assets/images/proyecto-incendios.svg" alt="Imagen del proyecto Optimizador de suministros para incendios" width="640" height="360">
           </div>
-          <div class="project-text">
-            <h3 class="project-name">Optimizador de suministros para incendios</h3>
-            <!-- EDITAR: descripción breve -->
-            <p class="project-description">
-              Modelo de optimización para distribuir suministros ante incendios en la Región del Biobío.
-            </p>
-            <!-- EDITAR: tecnologías (una por <li>) -->
-            <ul class="tech-list">
-              <li>Gurobi</li>
-              <li>[COMPLETAR]</li>
-            </ul>
-          </div>
+          <h3 class="project-name">Optimizador de suministros para incendios</h3>
+          <!-- EDITAR: descripción breve -->
+          <p class="project-description">
+            Modelo de optimización para distribuir suministros ante incendios en la Región del Biobío.
+          </p>
+          <!-- EDITAR: tecnologías (una por <li>) -->
+          <ul class="tech-list">
+            <li>Gurobi</li>
+            <li>[COMPLETAR]</li>
+          </ul>
         </li>
 
       </ul>
     </section>
 
     <!-- ============================================================
-         5. CONTACTO
+         4. CONTACTO
          ============================================================ -->
-    <section class="contact" id="contacto" data-tone="alt">
-      <h2 class="contact-title">Hablemos.</h2>
+    <section class="section" id="contacto" data-tone="alt">
+      <h2 class="section-title">Contáctame :)</h2>
       <!-- EDITAR: frase de cierre -->
       <p class="contact-text">[COMPLETAR: una frase sobre qué oportunidades buscas.]</p>
 
-      <div class="contact-links">
+      <div class="contact-buttons">
         <!-- EDITAR: reemplaza assets/cv/cv.pdf por tu CV real (mismo nombre) -->
-        <a class="button" href="assets/cv/cv.pdf" target="_blank" rel="noopener">Ver CV formal</a>
+        <a class="button button-primary" href="assets/cv/cv.pdf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+          Ver CV formal
+        </a>
         <!-- EDITAR: URL de tu perfil de LinkedIn -->
-        <a class="text-link" href="https://www.linkedin.com/in/COMPLETAR" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="button" href="https://www.linkedin.com/in/COMPLETAR" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
         <!-- EDITAR: tu correo, en el href (después de "mailto:") y en el texto -->
-        <a class="text-link text-link-mono" href="mailto:COMPLETAR@correo.com">[COMPLETAR: correo]</a>
+        <a class="button" href="mailto:COMPLETAR@correo.com">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <span class="button-mono">[COMPLETAR: correo]</span>
+        </a>
       </div>
     </section>
 
   </main>
 
   <footer class="footer">
-    <p>© 2026 Matías Fuentes</p>
+    <p>© 2026 Matías Fuentes Mora - Portafolio inspirado en el diseño de Yuji Sato.</p>
   </footer>
 
   <script src="js/main.js"></script>
