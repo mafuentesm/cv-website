@@ -568,8 +568,13 @@ a:focus-visible {
 /* ==========================================================================
    9. CONTACTO Y FOOTER
    ========================================================================== */
+/* Título de Contacto: menos espacio abajo porque lo sigue una frase, no una lista */
+.contact-title {
+  margin-bottom: 1rem;   /* espacio entre "¡Contáctame!" y la frase: cámbialo aquí */
+}
+
 .contact-text {
-  max-width: 34rem;
+  max-width: 70rem;
   color: var(--color-text-muted);
   font-size: 1.125rem;
 }
