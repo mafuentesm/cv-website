@@ -1,0 +1,640 @@
+/* ==========================================================================
+   PORTAFOLIO · Matías Fuentes
+
+   Índice
+   1. Variables (PERSONALIZA AQUÍ)
+   2. Base
+   3. Motor de scroll (--progress)
+   4. Fondo y barra de progreso
+   5. Hero
+   6. Presentación
+   7. Educación
+   8. Proyectos
+   9. Contacto y footer
+   10. Pantallas grandes
+   11. Movimiento reducido
+
+   Cómo funcionan las animaciones:
+   cada elemento con .scroll-scene o .scroll-item recibe una variable
+   --progress que va de 0 a 1 mientras lo recorres con el scroll.
+   Las reglas de cada sección usan ese número para mover (transform)
+   y desvanecer (opacity). Nada más se anima.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. VARIABLES — todo lo configurable está en este bloque
+   ========================================================================== */
+:root {
+  /* Fuentes: deben coincidir con las del <link> de Google Fonts en index.html */
+  --font-title: "Space Grotesk", sans-serif;   /* títulos */
+  --font-body: "Inter", sans-serif;            /* texto corrido */
+  --font-mono: "JetBrains Mono", monospace;    /* periodos, tecnologías, detalles */
+
+  /* Tamaños de texto. clamp(mínimo, según ancho de pantalla, máximo) */
+  --size-h1: clamp(4rem, 20vw, 8rem);         /* nombre en el hero */
+  --size-h2: clamp(2.75rem, 9vw, 6.5rem);      /* títulos de sección */
+  --size-lead: clamp(1.75rem, 4.6vw, 3.5rem);  /* texto de presentación */
+  --size-body: 1.0625rem;                      /* texto normal */
+
+  /* Colores */
+  --color-bg: #0f1115;           /* fondo principal */
+  --color-bg-alt: #161a21;       /* fondo de Educación y Contacto (cambio sutil) */
+  --color-text: #f2f3f5;         /* texto principal */
+  --color-text-muted: #8a909b;   /* texto secundario */
+  --color-line: #262b34;         /* líneas finas */
+  --color-accent: #5aa2f0;       /* único color de acento: úsalo poco */
+
+  /* Espaciado y medidas */
+  --space-section: clamp(6rem, 16vw, 11rem);   /* espacio arriba y abajo de cada sección */
+  --gutter: clamp(1.5rem, 5vw, 3rem);          /* margen lateral */
+  --width-content: 72rem;                      /* ancho máximo del contenido */
+  --radius-image: 20px;                        /* esquinas de las imágenes */
+
+  /* Curva de las transiciones */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: var(--size-h1);
+}
+
+h2 {
+  font-size: var(--size-h2);
+}
+
+h3 {
+  font-size: clamp(1.6rem, 3.6vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+p,
+ol,
+ul {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+
+/* ==========================================================================
+   3. MOTOR DE SCROLL
+   --progress es un número de 0 a 1:
+   - .scroll-scene (secciones fijas): 0 cuando la sección llega arriba,
+     1 cuando termina de pasar.
+   - .scroll-item (proyectos): 0 cuando asoma por abajo, 1 cuando sale por arriba.
+   Si el navegador soporta animation-timeline, CSS lo calcula solo.
+   Si no, lo calcula js/main.js con los mismos rangos.
+   ========================================================================== */
+@property --progress {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@keyframes progress {
+  from {
+    --progress: 0;
+  }
+  to {
+    --progress: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .scroll-scene {
+      animation: progress linear both;
+      animation-timeline: view();
+      animation-range: contain 0% contain 100%;
+    }
+
+    .scroll-item {
+      animation: progress linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+    }
+
+    .scroll-progress {
+      animation: progress linear both;
+      animation-timeline: scroll(root);
+    }
+  }
+}
+
+
+/* ==========================================================================
+   4. FONDO Y BARRA DE PROGRESO
+   ========================================================================== */
+
+/* Capa con el tono alternativo. js/main.js agrega .tone-alt al <body>
+   cuando una sección con data-tone="alt" llega al centro de la pantalla. */
+.page-tint {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-bg-alt);
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+
+.tone-alt .page-tint {
+  opacity: 1;
+}
+
+/* Línea fina arriba que crece mientras bajas por la página */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-accent);
+  transform: scaleX(var(--progress));
+  transform-origin: left;
+}
+
+
+/* ==========================================================================
+   5. HERO
+   La sección mide 160vh; su escenario queda fijo (sticky) durante el
+   recorrido. Con --progress: el nombre se achica y se desvanece, la foto
+   se achica y sube.
+   ========================================================================== */
+.hero {
+  height: 160vh;
+}
+
+.hero-stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 4vh, 3rem);
+  height: 100vh;
+  height: 100svh;
+  padding: 0 var(--gutter);
+  overflow: clip;
+}
+
+.hero-photo {
+  width: clamp(8rem, 24vw, 13rem);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: calc(1 - var(--progress));
+  transform: translateY(calc(var(--progress) * -22vh)) scale(calc(1 - var(--progress) * 0.5));
+}
+
+.hero-title {
+  text-align: center;
+  opacity: calc(1 - var(--progress) * 1.2);
+  transform: scale(calc(1 - var(--progress) * 0.15));
+}
+
+/* Línea vertical que invita a bajar; desaparece apenas empiezas */
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  width: 2rem;
+  height: 3.5rem;
+  margin-left: -1rem;
+  opacity: calc(1 - var(--progress) * 6);
+}
+
+.scroll-indicator::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-accent);
+  transform-origin: top;
+  animation: scroll-indicator-pulse 2.2s var(--ease) infinite;
+}
+
+@keyframes scroll-indicator-pulse {
+  0% {
+    opacity: 1;
+    transform: scaleY(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(1);
+  }
+}
+
+
+/* ==========================================================================
+   6. PRESENTACIÓN
+   js/main.js separa el texto en palabras (.intro-word) y le da a cada una
+   su número (--word-index) y el total (--word-count). Cada palabra pasa
+   de tenue a blanco según --progress, una detrás de otra.
+   ========================================================================== */
+.intro {
+  height: 260vh;
+}
+
+.intro-stage {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100svh;
+  padding: 0 var(--gutter);
+}
+
+.intro-text {
+  max-width: 52rem;
+  font-family: var(--font-title);
+  font-size: var(--size-lead);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.intro-word {
+  /* Avance del texto: empieza al 10% del recorrido y termina al 85% */
+  --text-progress: calc((var(--progress) - 0.1) / 0.75);
+  /* Cada palabra se ilumina en el lapso de unas 3 palabras */
+  --word-light: calc((var(--text-progress) * (var(--word-count) + 3) - var(--word-index)) / 3);
+  opacity: clamp(0.16, var(--word-light), 1);
+}
+
+
+/* ==========================================================================
+   7. EDUCACIÓN
+   El escenario queda fijo mientras pasas. Las universidades están apiladas
+   en el mismo lugar y se reemplazan con un crossfade: cada una ocupa un
+   tramo igual del recorrido. js/main.js define --item-index y --item-count.
+   ========================================================================== */
+.education {
+  height: calc(100vh + var(--item-count, 1) * 80vh);
+}
+
+.education-stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  align-content: center;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  max-width: var(--width-content);
+  height: 100vh;
+  height: 100svh;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* Todas las universidades en la misma celda, una encima de otra */
+.education-list {
+  display: grid;
+}
+
+.education-item {
+  grid-area: 1 / 1;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-line);
+
+  /* Posición dentro del tramo de esta universidad (0 al empezar, 1 al terminar) */
+  --item-progress: calc(var(--progress) * var(--item-count, 1) - var(--item-index, 0));
+  /* Entra alrededor del inicio de su tramo y sale alrededor del final */
+  --fade-in: clamp(0, (var(--item-progress) + 0.2) / 0.4, 1);
+  --fade-out: clamp(0, (1.2 - var(--item-progress)) / 0.4, 1);
+
+  opacity: min(var(--fade-in), var(--fade-out));
+  transform: translateY(calc((var(--fade-out) - var(--fade-in)) * 2rem));
+}
+
+/* La primera ya está visible al llegar; la última se queda al final */
+.education-item:first-child {
+  --fade-in: 1;
+}
+
+.education-item:last-child {
+  --fade-out: 1;
+}
+
+.education-logo {
+  width: 15rem;
+  height: auto;          /* el alto sigue la forma del logo, sin espacio vacío */
+  margin-bottom: 1rem;   /* espacio entre el logo y el nombre: cámbialo aquí */
+}
+
+.education-degree {
+  margin-top: 1rem;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
+
+.education-period {
+  margin-top: 0.5rem;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+
+/* ==========================================================================
+   8. PROYECTOS
+   Cada proyecto entra creciendo de 0.92 a 1 con fade, y sale al revés.
+   La imagen se acerca levemente mientras está a la vista.
+   ========================================================================== */
+.projects {
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: var(--space-section) var(--gutter);
+}
+
+.projects-title {
+  margin-bottom: clamp(3rem, 8vw, 6rem);
+}
+
+.project-list {
+  display: grid;
+  gap: var(--space-section);
+}
+
+.project {
+  /* 0 → 1 durante el primer 30% del recorrido, 1 → 0 durante el último 30% */
+  --enter: clamp(0, var(--progress) / 0.3, 1);
+  --leave: clamp(0, (1 - var(--progress)) / 0.3, 1);
+  --shown: min(var(--enter), var(--leave));
+
+  opacity: var(--shown);
+  transform: scale(calc(0.92 + var(--shown) * 0.08));
+}
+
+.project-image-frame {
+  border-radius: var(--radius-image);
+  background-color: var(--color-bg-alt);
+  overflow: clip;
+}
+
+.project-image {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transform: scale(calc(1.12 - var(--progress) * 0.12));
+}
+
+.project-text {
+  display: grid;
+  gap: 1rem;
+  padding-top: 2rem;
+}
+
+.project-description {
+  max-width: 34rem;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+
+/* ==========================================================================
+   9. CONTACTO Y FOOTER
+   ========================================================================== */
+.contact {
+  padding: var(--space-section) var(--gutter);
+  text-align: center;
+}
+
+.contact-text {
+  max-width: 30rem;
+  margin: 1.75rem auto 0;
+  color: var(--color-text-muted);
+  font-size: 1.125rem;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+/* Botón principal: el único bloque de color de acento */
+.button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 500;
+  text-decoration: none;
+  transition: transform 0.5s var(--ease);
+}
+
+.button:hover {
+  transform: scale(1.04);
+}
+
+/* Enlaces de texto con subrayado que crece al pasar el mouse */
+.text-link {
+  position: relative;
+  padding-bottom: 0.2rem;
+  text-decoration: none;
+}
+
+.text-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s var(--ease);
+}
+
+.text-link:hover::after {
+  transform: scaleX(1);
+}
+
+.text-link-mono {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+}
+
+.footer {
+  padding: 2rem var(--gutter);
+  border-top: 1px solid var(--color-line);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   10. PANTALLAS GRANDES (el diseño base es para móvil)
+   ========================================================================== */
+@media (min-width: 860px) {
+  /* Educación: título a la izquierda, universidad a la derecha */
+  .education-stage {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  /* Proyectos: nombre a la izquierda, descripción y tecnologías a la derecha */
+  .project-text {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 3rem;
+  }
+
+  .project-name {
+    grid-row: span 2;
+  }
+
+  .contact-links {
+    flex-direction: row;
+    justify-content: center;
+    gap: 2.5rem;
+  }
+}
+
+
+/* ==========================================================================
+   11. MOVIMIENTO REDUCIDO
+   Sin animaciones: secciones de alto normal y todo el contenido visible.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero,
+  .intro,
+  .education {
+    height: auto;
+  }
+
+  .hero-stage,
+  .intro-stage,
+  .education-stage {
+    position: static;
+    height: auto;
+    padding-top: var(--space-section);
+    padding-bottom: var(--space-section);
+  }
+
+  .hero-stage {
+    min-height: 100svh;
+  }
+
+  .hero-photo,
+  .hero-title,
+  .scroll-indicator,
+  .intro-word,
+  .education-item,
+  .project,
+  .project-image {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Universidades una debajo de otra en vez de apiladas */
+  .education-list {
+    gap: 3rem;
+  }
+
+  .education-item {
+    grid-area: auto;
+  }
+
+  .scroll-indicator::after {
+    animation: none;
+  }
+
+  .scroll-progress {
+    display: none;
+  }
+
+  .page-tint,
+  .button,
+  .text-link::after {
+    transition: none;
+  }
+}
